@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <%- include("components/_meta.ejs", { title: "Query Results", description: "Download your doujin here" }) -%>
+        <link rel="stylesheet" href="/public/css/results.css" />
+        <script src="/public/script/results.js" type="module" defer></script>
+    </head>
+    <body>
+        <%- include("components/_navbar.ejs", { title: "Query Results" }) -%>
+        <main id="main" class="d-flex justify-content-around align-items-center position-relative flex-column">
+            <a href="#load-more" class="btn btn-down text-decoration-none position-fixed" data-btn-down>
+                <span class="fas fa-arrow-down"></span>
+            </a>
+            <div class="doujin d-flex position-relative flex-column justify-content-center align-items-center">
+                <h1 class="title">Doujin List</h1>
+                <hr />
+                <div class="doujin-nav d-flex flex-column justify-content-center align-items-center">
+                    <p class="sort-text">Sort by:</p>
+                    <% let query = locals.query || {} %>
+                    <div class="sort-list w-100">
+                        <a class="badge" data-sort="recent" href="<%= `/search/results?${new URLSearchParams([...Object.keys(query).filter(e => e === "query").map(e => [e, query[e]]), ["sort", ""]]).toString()}` %>">Recent</a>
+                    </div>
+                    <p class="sort-info">Popular:</p>
+                    <div class="sort-list w-100">
+                        <a class="badge" data-sort="popular-today" href="<%= `/search/results?${new URLSearchParams([...Object.keys(query).filter(e => e === "query").map(e => [e, query[e]]), ["sort", "popular-today"]]).toString()}` %>">Today</a>
+                        <a class="badge" data-sort="popular-week" href="<%= `/search/results?${new URLSearchParams([...Object.keys(query).filter(e => e === "query").map(e => [e, query[e]]), ["sort", "popular-week"]]).toString()}` %>">Week</a>
+                        <a class="badge" data-sort="popular" href="<%= `/search/results?${new URLSearchParams([...Object.keys(query).filter(e => e === "query").map(e => [e, query[e]]), ["sort", "popular"]]).toString()}` %>">Most</a>
+                    </div>
+                </div>
+                <br />
+                <div class="doujin-container" data-doujins="1" data-page="<%= locals.doujin.num_pages %>" >
+                    <template data-doujin-template>
+                        <a href="" class="card d-flex flex-column justify-content-around align-items-center position-relative">
+                            <div class="img-wrapper position-relative w-100 h-auto">
+                                <span class="position-absolute card-lang" data-card-language></span>
+                                <img src="" data-card-cover loading="lazy" />
+                            </div>
+                                <p data-card-title></p>
+                        </a>
+                    </template>
+                    <template data-separator-template>
+                        <div class="page-separator d-flex justify-content-between align-items-center w-100">
+                            <hr>
+                            <p class="page-separator-text" data-separator-text></p>
+                            <hr>
+                        </div>
+                    </template>
+                    
+                    <% locals.doujin.result.forEach(e => { %>
+                        <a href="<%= `/download?id=${e.id}` %>" class="card d-flex flex-column justify-content-around align-items-center position-relative">
+                            <div class="img-wrapper position-relative w-100 h-auto">
+                                <span class="position-absolute card-lang" data-card-language><%= e.languages.filter((e) => e.name !== "translated")[0]?.name || "??" %></span>
+                                <img src="<%= `/api/thumbnail/${e.media_id}/${e.images.cover.t === "j" ? "jpg" : "png"}` %>" data-card-cover loading="lazy" />
+                            </div>
+                            <p data-card-title><%= `${e.title.pretty}` %></p>
+                        </a>
+                    <%}) %>
+                </div>
+                <botton id="load-more" data-add class="btn btn-add<%= locals.doujin.num_pages <= 1 ? " limit" : "" %>">
+                    <span class="fas fa-link"></span> Load More
+                </botton>
+                <p class="page-count text-center" data-page-count><span data-current>1</span> of <span data-end><%= locals.doujin.num_pages %></span> <br/> pages <span>loaded</span></p>
+            </div>
+        </main>
+        <%- include("components/_footer.ejs") -%>
+    </body>
+</html>

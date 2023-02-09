@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@font-face {
+    src: url("/public/font/Gotham\ Rounded\ Medium.otf") format("opentype");
+    font-family: "Gotham Rounded Medium";
+}
+
+@font-face {
+    src: url("/public/font/Gotham\ Rounded\ Light.otf") format("opentype");
+    font-family: "Gotham Rounded Light";
+}
+
+//Variable
+:root {
+    --clr-primary: #ed2553;
+    --clr-primary-300: #c6103a;
+    --clr-primary-200: hsl(346, 85%, 32%);
+    --clr-bg: #1f1f1f;
+}
+
+// Utility
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden !important;
+    scroll-behavior: smooth;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Gotham Rounded Medium", Poppins, Arial;
+    overflow-x: hidden;
+    max-width: 100vw !important;
+    width: 100% !important;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: white;
+    background-color: var(--clr-bg);
+    overflow-x: hidden;
+
+    & > * {
+        max-width: 100%;
+    }
+}
+
+.btn {
+    box-shadow: none !important;
+}
+
+// Actual Css
+
+// Debugging Style
+// * {
+//     outline: 1px solid white;
+// }
+
+main {
+    padding: 1em clamp(0.75em, 3vw, 1.5em);
+    margin-top: 15vh;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 65vh;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+    html::-webkit-scrollbar {
+        position: fixed;
+        background-color: var(--clr-bg);
+    }
+
+    html::-webkit-scrollbar-botton {
+        background-color: var(--clr-primary-300);
+    }
+    html::-webkit-scrollbar-thumb {
+        background-color: var(--clr-primary-300);
+    }
+}
